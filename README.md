@@ -1,23 +1,44 @@
-# Projeto Adventure - Fase 1
-**Nome Estudante:** Luana de Lima Kanitz  
-**Disciplina:** Programação Orientada a Objetos  
-**Data:** 2025
+<h1 align="center"><strong>🎮 Jogo de Aventura - O Segredo da Biblioteca dos Relógios</strong></h1>
 
-## Como executar
-1. Instale o [Node.js](https://nodejs.org).
-2. Abra o terminal dentro da pasta do projeto.
-3. Execute o comando: "node index.js"
-4. Use os comandos disponíveis:
-- `pega <ferramenta>`
-- `usa <ferramenta> <objeto>`
-- `sai <nome_da_sala>`
-- `inventario`
-- `ler <objeto>`
-- `fim` para encerrar o jogo.
+Um jogo de aventura textual em **JavaScript com POO**, onde você explora uma antiga mansão, coleta ferramentas e resolve enigmas para encontrar o misterioso **Relógio do Fundador**. ⏳
 
-## Regras
-- Mochila comporta até 3 itens.  
-- Lanterna tem carga limitada.  
-- Usar faca no fogão causa derrota.  
-- Usar lanterna no painel do porão revela a caixa.  
-- Usar chave na caixa = vitória.
+---
+
+## 🗺️ Mapa do Jogo
+
+Jardim  ↔  Hall_de_Entrada  ↔  Biblioteca  ↔  Laboratório  ↔  Cozinha  ↔  Porão
+
+---
+
+## 🎮 Como Jogar
+
+### Execução:
+```bash
+node index.js
+````
+
+### Comandos Principais:
+- `sai [sala]` → Navegar entre salas  
+- `pega [ferramenta]` → Coletar uma ferramenta  
+- `usa [ferramenta] [objeto]` → Interagir com um objeto  
+- `ler [objeto]` → Ler bilhetes ou descrições  
+- `inventario` → Ver os itens da mochila  
+- `fim` → Encerrar o jogo  
+
+### Sequência para Vencer:
+1. `pega lanterna` (Biblioteca)  
+2. `pega chave` (Laboratório)  
+3. `usa lanterna painel` (Porão)  
+4. `usa chave caixa` (Porão)
+
+
+---
+## ⚙️ Características
+- ⏱️ Gameplay rápida
+- 🧠 Dificuldade iniciante
+- 🔦 Aventura textual com exploração e mistério
+- 💻 JavaScript + Programação Orientada a Objetos
+
+  ---
+  
+
