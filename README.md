@@ -1,6 +1,8 @@
 <h1 align="center"><strong>🎮 Jogo de Aventura - O Segredo da Biblioteca dos Relógios</strong></h1>
 
-Um jogo de aventura textual em **JavaScript com POO**, onde você explora uma antiga mansão, coleta ferramentas e resolve enigmas para encontrar o misterioso **Relógio do Fundador**. ⏳
+Um jogo de aventura textual desenvolvido como parte da disciplina Programação Orientada a Objetos, da Pontifícia Universidade Católica do Rio Grande do Sul (PUCRS).
+
+Feito em **JavaScript com POO**, onde você explora uma antiga mansão, coleta ferramentas e resolve enigmas para encontrar o misterioso **Relógio do Fundador**. ⏳
 
 ---
 
@@ -41,5 +43,6 @@ node index.js
 
 ---
   
+
 
 
