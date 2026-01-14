@@ -1,34 +1,52 @@
 // Mochila.js
-// Armazena as ferramentas do jogador
+// Implementação completa da mochila com capacidade limitada,
+// adicionar, remover, listar e obter ferramentas.
 
 class Mochila {
-  constructor() {
-    this.ferramentas = [];
-    this.capacidade = 3;
+  constructor(capacidade = 3) {
+    this._capacidade = capacidade;
+    this._ferramentas = [];
   }
 
   adicionar(ferramenta) {
-    if (this.ferramentas.length >= this.capacidade) {
+    if (!ferramenta || !ferramenta.nome) {
+      console.log("Ferramenta inválida.");
+      return false;
+    }
+
+    if (this._ferramentas.length >= this._capacidade) {
       console.log("A mochila está cheia!");
       return false;
     }
-    this.ferramentas.push(ferramenta);
+
+    this._ferramentas.push(ferramenta);
     console.log(`${ferramenta.nome} adicionado à mochila.`);
     return true;
   }
 
   obter(nome) {
-    return this.ferramentas.find(f => f.nome === nome);
+    return this._ferramentas.find(f => f.nome === nome);
   }
 
   remover(nome) {
-    const index = this.ferramentas.findIndex(f => f.nome === nome);
-    if (index !== -1) this.ferramentas.splice(index, 1);
+    const idx = this._ferramentas.findIndex(f => f.nome === nome);
+    if (idx === -1) return null;
+    return this._ferramentas.splice(idx, 1)[0];
   }
 
   listarFerramentas() {
-    if (this.ferramentas.length === 0) return "Mochila vazia.";
-    return "Na mochila: " + this.ferramentas.map(f => f.nome).join(", ");
+    if (this._ferramentas.length === 0) {
+      return "Mochila vazia.";
+    }
+
+    const lista = this._ferramentas.map(f => {
+      if (f.nome === "lanterna" && typeof f.carga !== "undefined") {
+        return `${f.nome} (carga:${f.carga})`;
+      }
+      return f.nome;
+    });
+
+    return "Na mochila: " + lista.join(", ");
   }
 }
 
