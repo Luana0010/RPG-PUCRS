@@ -1,69 +1,104 @@
 // Sala.js
-// Ambientes do jogo
+// Representa cada ambiente do jogo.
+// Sala delega interações para Objeto.interagir ou para Ferramenta.usar quando alvo for outra ferramenta.
 
 const Objeto = require("./Objeto");
 
 class Sala {
   constructor(nome) {
     this.nome = nome;
-    this.objetos = {};
-    this.ferramentas = {};
-    this.portas = {};
+
+    // Cada sala mantém seus próprios elementos internos
+    this.objetos = {};       // nome -> Objeto
+    this.ferramentas = {};   // nome -> Ferramenta
+    this.portas = {};        // nomeSala -> Sala
   }
 
+  // Descrição da sala
   descricaoCompleta() {
-    const objs = Object.keys(this.objetos).join(", ") || "nenhum objeto";
-    const ferrs = Object.keys(this.ferramentas).join(", ") || "nenhuma ferramenta";
-    const portas = Object.keys(this.portas).join(", ") || "nenhuma saída";
+    const objs = Object.keys(this.objetos).length
+      ? Object.keys(this.objetos).join(", ")
+      : "nenhum";
+
+    const ferrs = Object.keys(this.ferramentas).length
+      ? Object.keys(this.ferramentas).join(", ")
+      : "nenhuma";
+
+    const portas = Object.keys(this.portas).length
+      ? Object.keys(this.portas).join(", ")
+      : "nenhuma";
+
     return `Você está em ${this.nome}.\nObjetos: ${objs}\nFerramentas: ${ferrs}\nSaídas: ${portas}`;
   }
 
+  // Pegar ferramenta disponível na sala
   pegarFerramenta(nome, mochila) {
     const ferramenta = this.ferramentas[nome];
-    if (!ferramenta) return console.log("Essa ferramenta não está aqui.");
-    if (mochila.adicionar(ferramenta)) delete this.ferramentas[nome];
-  }
-
-  usarFerramenta(nomeFerramenta, nomeAlvo, mochila, engine) {
-  const ferramenta = mochila.obter(nomeFerramenta) || this.ferramentas[nomeFerramenta];
-  if (!ferramenta) return console.log("Você não tem essa ferramenta nem ela está aqui.");
-
-  // 1️⃣ Tenta achar um objeto na sala
-  const objeto = this.objetos[nomeAlvo];
-  if (objeto) {
-    try {
-      objeto.interagir(ferramenta, engine);
-    } catch (erro) {
-      console.error("⚠️ Erro ao tentar usar a ferramenta:", erro.message);
+    if (!ferramenta) {
+      console.log("Essa ferramenta não está aqui.");
+      return;
     }
-    return;
+
+    // tenta colocar na mochila; Se couber, remove da sala
+    if (mochila.adicionar(ferramenta)) {
+      delete this.ferramentas[nome];
+    }
   }
 
-  // 2️⃣ Tenta achar uma ferramenta alvo (pode estar na mochila)
-  const alvoFerramenta = mochila.obter(nomeAlvo);
-  if (alvoFerramenta) {
-    // Caso especial: recarregar lanterna com pilhas
-    if (nomeFerramenta === "pilhas" && nomeAlvo === "lanterna") {
-      alvoFerramenta.carga = 3;
-      console.log("🔋 Você colocou as pilhas novas na lanterna. Ela está totalmente recarregada! 💡");
+  // Uso de ferramenta em objeto ou em outra ferramenta
+  usarFerramenta(nomeFerramenta, nomeAlvo, mochila, engine) {
+    // 1- localizar a ferramenta usada
+    const ferramenta =
+      mochila.obter(nomeFerramenta) || this.ferramentas[nomeFerramenta];
 
-      // Remove as pilhas da mochila ou da sala, dependendo de onde estavam
-      if (mochila.obter("pilhas")) mochila.remover("pilhas");
-  else delete this.ferramentas["pilhas"];
+    if (!ferramenta) {
+      console.log("Você não tem essa ferramenta e ela não está na sala.");
+      return;
+    }
 
-  return;
-}
-    console.log("Essas ferramentas não interagem entre si.");
-    return;
+    // 2- tentar usar em um objeto da sala
+    const objeto = this.objetos[nomeAlvo];
+    if (objeto) {
+      const ferramentaFuncionou = ferramenta.usar(objeto, engine);
+      const resultado = objeto.interagir(ferramenta, engine);
+
+      // Consumo de ferramentas descartáveis (pilhas)
+      if (ferramenta.nome === "pilhas" && resultado) {
+        if (mochila.obter("pilhas")) mochila.remover("pilhas");
+        else delete this.ferramentas["pilhas"];
+      }
+      return;
+    }
+
+    // 3- tentar usar ferramenta em outra ferramenta
+    const alvoFerramenta =
+      mochila.obter(nomeAlvo) || this.ferramentas[nomeAlvo];
+
+    if (alvoFerramenta) {
+      const ok = ferramenta.usar(alvoFerramenta, engine);
+
+      // pilhas são consumidas ao recarregar
+      if (ok && ferramenta.nome === "pilhas") {
+        if (mochila.obter("pilhas")) mochila.remover("pilhas");
+        else delete this.ferramentas["pilhas"];
+      }
+      return;
+    }
+
+    // 4- nada encontrado
+    console.log("Não há esse alvo aqui.");
   }
 
-  console.log("Esse objeto não está aqui.");
-}
-
+  // Ler objeto
   lerObjeto(nome) {
-    const obj = this.objetos[nome];
-    if (!obj) return console.log("Não há esse objeto aqui.");
-    obj.ler();
+    const objeto = this.objetos[nome];
+
+    if (!objeto) {
+      console.log("Esse objeto não está aqui.");
+      return;
+    }
+
+    objeto.ler();
   }
 }
 
