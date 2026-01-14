@@ -1,22 +1,33 @@
 // Objeto.js
-// Objetos interativos no jogo
+// Representa objetos fixos do cenário.
+// Cada objeto pode ter uma função 'acao' que processa interação com uma ferramenta.
 
 class Objeto {
   constructor(nome, descricao, acao = null) {
     this.nome = nome;
     this.descricao = descricao;
-    this.acao = acao;
-    this.usado = false;
+    this.acao = acao; // função opcional (ferramenta, engine, self) => boolean
+    this.usado = false; 
   }
 
+  // Interagir usando uma ferramenta
   interagir(ferramenta, engine) {
-    if (this.acao) return this.acao(ferramenta, engine);
+    if (typeof this.acao === "function") {
+      try {
+        return this.acao(ferramenta, engine, this);
+      } catch (err) {
+        console.error("Erro durante a ação do objeto:", err.message);
+        return false;
+      }
+    }
+
     console.log("Nada acontece...");
     return false;
   }
 
+  // Ler/observar o objeto
   ler() {
-    console.log(`Você observa ${this.descricao}`);
+    console.log(this.descricao);
   }
 }
 
