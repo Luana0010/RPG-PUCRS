@@ -1,76 +1,117 @@
 // Ferramenta.js
-// Classe base e subclasses
+// Classe base Ferramenta e subclasses com comportamento próprio (herança + polimorfismo).
 
 class Ferramenta {
   constructor(nome, descricao = "") {
     this.nome = nome;
     this.descricao = descricao;
   }
+
+  usar(alvo, engine) {
+    console.log("Nada acontece com essa ferramenta por si só.");
+    return false;
+  }
 }
 
+// CHAVE
 class Chave extends Ferramenta {
   constructor() {
-    super("chave");
-    this.usos = 2;
-  }
-
-  usar() {
-    this.usos--;
-    if (this.usos < 0) return false;
-    return true;
-  }
-}
-
-class Lanterna extends Ferramenta {
-  constructor() {
-    super("lanterna", "uma lanterna velha com espaço para pilhas");
-    this.carga = 3;
+    super("chave", "uma chave antiga com dois usos");
+    this._usos = 2;
   }
 
   usar(alvo, engine) {
-    // Verifica se ainda há carga
-    if (this.carga <= 0) {
-      console.log("A lanterna não acende — as pilhas estão descarregadas! 🔋");
-      return;
+    if (!alvo || alvo.nome !== "caixa") {
+      console.log("A chave só funciona na caixa.");
+      return false;
     }
 
-    // Gasta 1 carga
-    this.carga--;
-    console.log(`Você acendeu a lanterna. Carga restante: ${this.carga}`);
-
-    // Ação especial: iluminar o painel
-   // if (alvo && alvo.nome === "painel") {
-    //  console.log("O painel foi iluminado! Há algo gravado nele...");
-    //  engine.salaAtual["Porao"].objetos.caixa = new Objeto(
-    //    "caixa",
-    //    "uma caixa metálica trancada. Parece haver algo dentro.",
-    //    (f, eng) => {
-    //      if (f.nome === "chave") {
-    //        console.log("Você abriu a caixa e encontrou o Relógio do Fundador! 🕰️");
-    //        eng.fim = true;
-    //      } else {
-    //        console.log("Essa ferramenta não serve aqui.");
-    //      }
-    //    }
-    //  );
-    //}
-
-    if (this.carga === 0) {
-      console.log("A lanterna apaga. As pilhas acabaram. 💀");
+    if (this._usos <= 0) {
+      console.log("A chave está desgastada e não serve mais.");
+      return false;
     }
+
+    this._usos--;
+    console.log("Você usou a chave.");
+    return true;
+  }
+
+  get usos() {
+    return this._usos;
   }
 }
 
+// LANTERNA
+class Lanterna extends Ferramenta {
+  constructor() {
+    super("lanterna", "uma lanterna velha movida a pilhas");
+    this._carga = 3;
+  }
+
+  usar(alvo, engine) {
+    if (this._carga <= 0) {
+      console.log("A lanterna está sem carga.");
+      return false;
+    }
+
+    this._carga--;
+    console.log(`Você usou a lanterna. Carga restante: ${this._carga}`);
+    return true;
+  }
+
+  recarregar(qtd = 3) {
+    this._carga = qtd;
+  }
+
+  get carga() {
+    return this._carga;
+  }
+}
+
+// FACA
 class Faca extends Ferramenta {
   constructor() {
-    super("faca");
-    this.usos = 1;
+    super("faca", "uma faca pequena e afiada");
+    this._usos = 1;
   }
 
-  usar() {
-    this.usos--;
-    return this.usos > 0;
+  usar(alvo, engine) {
+    if (this._usos <= 0) {
+      console.log("A faca está sem fio e não é mais útil.");
+      return false;
+    }
+
+    this._usos--;
+    console.log("Você usou a faca.");
+    return true;
+  }
+
+  get usos() {
+    return this._usos;
   }
 }
 
-module.exports = { Ferramenta, Chave, Lanterna, Faca };
+// PILHAS
+class Pilhas extends Ferramenta {
+  constructor(qtd = 1) {
+    super("pilhas", "um conjunto de pilhas novas");
+    this._qtd = qtd;
+  }
+
+  usar(alvo, engine) {
+    if (!alvo || alvo.nome !== "lanterna") {
+      console.log("As pilhas só servem para recarregar a lanterna.");
+      return false;
+    }
+
+    alvo.recarregar(3);
+    console.log("A lanterna foi recarregada.");
+    return true;
+  }
+
+  get quantidade() {
+    return this._qtd;
+  }
+}
+
+module.exports = { Ferramenta, Chave, Lanterna, Faca, Pilhas };
