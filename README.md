@@ -34,6 +34,13 @@ node index.js
 3. `usa lanterna painel` (Porão)  
 4. `usa chave caixa` (Porão)
 
+### Regras e Mecânicas Principais:
+- Mochila comporta até 3 itens
+- Lanterna possui carga limitada
+- Pilhas podem recarregar a lanterna
+- Faca usada no fogão → derrota
+- Lanterna usada no painel → revela caixa
+- Chave usada na caixa → vitória
 
 ---
 ## ⚙️ Características
@@ -41,9 +48,8 @@ node index.js
 - 🧠 Dificuldade iniciante
 - 🔦 Aventura textual com exploração e mistério
 - 💻 JavaScript + Programação Orientada a Objetos
-
----
   
+
 
 
 
