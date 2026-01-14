@@ -22,7 +22,8 @@ node index.js
 ### Comandos Principais:
 - `sai [sala]` → Navegar entre salas  
 - `pega [ferramenta]` → Coletar uma ferramenta  
-- `usa [ferramenta] [objeto]` → Interagir com um objeto  
+- `usa [ferramenta] [objeto]` → Interagir com um objeto
+- `largar [ferramenta]` → Largar um item na sala atual  
 - `ler [objeto]` → Ler bilhetes ou descrições  
 - `inventario` → Ver os itens da mochila  
 - `fim` → Encerrar o jogo  
@@ -43,6 +44,7 @@ node index.js
 
 ---
   
+
 
 
 
